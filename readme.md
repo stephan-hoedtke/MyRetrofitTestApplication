@@ -5,7 +5,9 @@ Testing Android with
 - Dagger Hilt
 - Retrofit
 - GsonConverterFactory
-- Unit tests for Retrofit and the gson converter
+- Jackson Object Mapper and JacksonConverterFactory to handle GeoJson
+- Unit tests for Retrofit and the converters
+- Resource files to supply fake response for mockWebServer
 
 ### Follow installation steps on
 
@@ -29,5 +31,16 @@ Testing Android with
 
 - [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 
+### Code example:
 
+```
+val mapper = jacksonObjectMapper()
+    .registerModule(JavaTimeModule());
 
+api = Retrofit.Builder()
+   .baseUrl(mockWebServer.url("/points/1/"))
+   .client(client)
+   .addConverterFactory(JacksonConverterFactory.create(mapper))
+   .build()
+   .create(PointFormFeatureApi::class.java)
+```
