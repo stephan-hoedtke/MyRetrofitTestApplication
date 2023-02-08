@@ -1,4 +1,4 @@
-package com.stho.beaver.ui.viewbinding
+package com.example.myretrofittestapplication.viewbinding
 
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -20,7 +20,6 @@ import kotlin.reflect.KProperty
  */
 inline fun <reified T : ViewBinding> Fragment.viewBinding() =
     FragmentViewBindingDelegate(T::class.java, this)
-
 
 
 class FragmentViewBindingDelegate<T : ViewBinding>(

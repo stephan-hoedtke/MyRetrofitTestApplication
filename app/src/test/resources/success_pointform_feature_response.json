@@ -1,0 +1,19 @@
+{
+  "type": "Feature",
+  "id": 17,
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      52.1,
+      13.2
+    ]
+  },
+  "properties": {
+    "id": 17,
+    "name": "Home",
+    "description": "Somewhere around Berlin",
+    "creationDate": "2023-02-08T07:12:00+02",
+    "creatorName": "STHO"
+  }
+}
+

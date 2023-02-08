@@ -7,16 +7,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.myretrofittestapplication.catfacts.CatFact
 import com.example.myretrofittestapplication.databinding.FragmentFirstBinding
-import com.stho.beaver.ui.viewbinding.viewBinding
+import com.example.myretrofittestapplication.viewbinding.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 @AndroidEntryPoint
 class FirstFragment : Fragment(R.layout.fragment_first) {
 
@@ -34,15 +32,16 @@ class FirstFragment : Fragment(R.layout.fragment_first) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
-
+        setupButtons()
         observeFacts()
         callDataApi()
     }
 
+    private fun setupButtons() {
+        binding.buttonFirst.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+    }
 
     private fun observeFacts() {
         viewModel.catFactsLD.observe(viewLifecycleOwner) { fact -> onUpdateFact(fact) }
@@ -53,24 +52,11 @@ class FirstFragment : Fragment(R.layout.fragment_first) {
     }
 
     private fun callDataApi() {
-//        lifecycleScope.launchWhenResumed {
-//            val controller = MyDataController()
-//            controller.start()
-//        }
-//
-//        lifecycleScope.launch {
-//            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                uiStateFlow.collect { uiState ->
-//                    updateUi(uiState)
-//                }
-//            }
-//        }
         val runnableCode = Runnable {
             CoroutineScope(Dispatchers.Default).launch {
                 viewModel.fetchFact()
             }
         }
-
         handler.postDelayed(runnableCode, 100)
     }
 }

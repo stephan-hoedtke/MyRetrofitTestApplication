@@ -1,5 +1,6 @@
-package com.example.myretrofittestapplication
+package com.example.myretrofittestapplication.catfacts
 
+import com.example.myretrofittestapplication.NetworkConfiguration
 import retrofit2.Call
 import retrofit2.http.GET
 

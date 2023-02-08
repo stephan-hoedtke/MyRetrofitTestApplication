@@ -21,6 +21,10 @@ Testing Android with
   <br> [Daniel Horowitz](https://proandroiddev.com/testing-retrofit-converter-with-mock-webserver-50f3e1f54013)
   <br> [Testim](https://www.testim.io/blog/how-to-use-mockwebserver/)
 
+- for Geo Json Serialization
+  <br> [John Codeos](https://johncodeos.com/how-to-parse-json-with-retrofit-converters-using-kotlin/)
+  <br> [filosganga/geogson](https://github.com/filosganga/geogson)
+
 ### Links:
 
 - [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)

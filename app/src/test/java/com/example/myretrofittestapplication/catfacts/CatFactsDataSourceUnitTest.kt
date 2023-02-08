@@ -1,5 +1,6 @@
-package com.example.myretrofittestapplication
+package com.example.myretrofittestapplication.catfacts
 
+import com.example.myretrofittestapplication.ResourceFileReader
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.runBlocking
@@ -17,6 +18,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 
+/**
+ * We may use the GsonConverterFactory for the simple "CatFact" Object.
+ *
+ * Please note, the CatFactApi is used in the app to update the text in FirstFragment. It calls a public Webservice in the internet, there.
+ * Here, for the unit test, we are faking the webservice with a customer response returned by mockWebServer.
+ * No internet call is made by the test.
+ */
 class CatFactsDataSourceUnitTest {
 
     private val mockWebServer = MockWebServer()
@@ -50,20 +58,45 @@ class CatFactsDataSourceUnitTest {
         mockWebServer.shutdown()
     }
 
+    @Test
+    fun `deserialization can handle CatFact`() {
+        // given
+        val json: String = "{ \"fact\": \"This is my fact\", \"length\": 15 }"
+
+        // when
+        val actualFact: CatFact = deserialize(json);
+
+        // then
+        assertEquals("This is my fact", actualFact.fact)
+        assertEquals(15, actualFact.length)
+    }
+
+    @Test
+    fun `serialization can handle CatFact`() {
+        // given
+        val fact = CatFact("This is another fact", length = 20)
+
+        // when
+        val actualJson: String = serialize(fact);
+
+        // then
+        assertEquals("{\"fact\":\"This is another fact\",\"length\":20}", actualJson)
+    }
 
     @Test
     fun `check MockResponseFileReader can read a json file from resources`() {
         // when
-        val content = MockResponseFileReader.read(SUCCESS_FACT_RESPONSE_JSON)
+        val content = ResourceFileReader.read(SUCCESS_FACT_RESPONSE_JSON)
 
         // then
         assertNotNull(content)
     }
 
+
     @Test
-    fun `deserialization and serialization with Gson can handle CatFact`() {
+    fun `deserialization and serialization works with supplied response file`() {
         // given
-        val json: String = MockResponseFileReader.read(SUCCESS_FACT_RESPONSE_JSON)
+        val json: String = ResourceFileReader.read(SUCCESS_FACT_RESPONSE_JSON)
 
         // when
         val fact: CatFact = deserialize(json);
@@ -73,8 +106,7 @@ class CatFactsDataSourceUnitTest {
         assertNotNull(json2)
 
         // then
-        assertTrue(json.pure() == json.pure())
-        // Hint: assertEquals(json.pure(), json2.pure()) does not work
+        assertTrue(json2.contains("In the 1930s, two Russian biologists discovered"))
     }
 
     @Test
@@ -114,12 +146,13 @@ class CatFactsDataSourceUnitTest {
 
     companion object {
         private const val SUCCESS_FACT_RESPONSE_JSON = "success_fact_response.json"
-        private const val FAILURE_FACT_RESPONSE_JSON = "failure_fact_response.json"
 
+        @Suppress("SameParameterValue")
         private fun withBodyOf(path: String): String {
-            return MockResponseFileReader.read(path)
+            return ResourceFileReader.read(path)
         }
 
+        @Suppress("SameParameterValue")
         private fun withMockResponseOf(body: String, code: Int = HttpURLConnection.HTTP_OK): MockResponse {
             return MockResponse()
                 .setResponseCode(code)
@@ -135,9 +168,4 @@ class CatFactsDataSourceUnitTest {
 
     }
 }
-
-private fun String.pure(): String =
-    this.replace("\n", "")
-        .replace(" ", "")
-
 

@@ -1,6 +1,7 @@
-package com.example.myretrofittestapplication
+package com.example.myretrofittestapplication.catfacts
 
 import android.util.Log
+import com.example.myretrofittestapplication.NetworkConfiguration
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
